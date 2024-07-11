@@ -11,6 +11,7 @@ using LunarOSPathfinder;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace LunarOSPathfinder.Executables
 {
@@ -43,7 +44,7 @@ namespace LunarOSPathfinder.Executables
         float rectOpTime = 0.0f;
         bool raiseRectOpacity = true;
 
-        public static Texture2D logo;
+        private static Texture2D logo;
 
         public override void Draw(float t)
         {
@@ -60,6 +61,14 @@ namespace LunarOSPathfinder.Executables
             logoRect.Y = (int)Math.Ceiling(bounds.Center.Y / 1.55f);
             logoRect.Width = logoWidth;
             logoRect.Height = logoHeight;
+
+            string basePath = System.Environment.CurrentDirectory;
+            string resourcesFolder = basePath + "/BepInEx/Resources/";
+            GraphicsDevice userGraphics = GuiData.spriteBatch.GraphicsDevice;
+
+            FileStream logoStream = File.OpenRead(resourcesFolder + "/Images/LunarOSLogo.png");
+            logo = Texture2D.FromStream(userGraphics, logoStream);
+            logoStream.Dispose();
 
             GuiData.spriteBatch.Draw(logo, logoRect, Color.White * 0.1f); // Draw Logo
 

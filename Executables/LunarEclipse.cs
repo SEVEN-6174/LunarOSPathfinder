@@ -14,6 +14,7 @@ using Hacknet.Gui;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace LunarOSPathfinder.Executables
 {
@@ -28,8 +29,8 @@ namespace LunarOSPathfinder.Executables
             this.needsProxyAccess = true;
         }
 
-        public static Texture2D outline;
-        public static Texture2D filled;
+        private static Texture2D outline;
+        private static Texture2D filled;
 
         private readonly Random random = new Random();
 
@@ -178,6 +179,18 @@ namespace LunarOSPathfinder.Executables
             {
                 isRed = false;
             }
+
+            string basePath = System.Environment.CurrentDirectory;
+            string resourcesFolder = basePath + "/BepInEx/Resources/";
+            GraphicsDevice userGraphics = GuiData.spriteBatch.GraphicsDevice;
+
+            FileStream eclipseOutlineStream = File.OpenRead(resourcesFolder + "/Images/Eclipse/LunarEclipse_Outline.png");
+            outline = Texture2D.FromStream(userGraphics, eclipseOutlineStream);
+            eclipseOutlineStream.Dispose();
+
+            FileStream eclipseFillStream = File.OpenRead(resourcesFolder + "/Images/Eclipse/LunarEclipse_Fill.png");
+            filled = Texture2D.FromStream(userGraphics, eclipseFillStream);
+            eclipseFillStream.Dispose();
 
             GuiData.spriteBatch.Draw(filled, innerMoonRect, fillColor * (fillOpacity * fillFade));
             GuiData.spriteBatch.Draw(outline, moonRect, Color.White * 0.3f);

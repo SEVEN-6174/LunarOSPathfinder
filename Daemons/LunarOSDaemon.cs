@@ -49,7 +49,7 @@ namespace LunarOSPathfinder.Daemons
         [XMLStorage]
         public string ButtonText = "Debug Menu";
 
-        public static Texture2D logo;
+        private Texture2D logo;
 
         public override void draw(Rectangle bounds, SpriteBatch sb)
         {
@@ -68,6 +68,14 @@ namespace LunarOSPathfinder.Daemons
             logoRect.Y = center.Y - 150;
             logoRect.Width = 325;
             logoRect.Height = 325;
+
+            string basePath = System.Environment.CurrentDirectory;
+            string resourcesFolder = basePath + "/BepInEx/Resources/";
+            GraphicsDevice userGraphics = GuiData.spriteBatch.GraphicsDevice;
+
+            FileStream logoStream = File.OpenRead(resourcesFolder + "/Images/LunarOSLogo.png");
+            logo = Texture2D.FromStream(userGraphics, logoStream);
+            logoStream.Dispose();
 
             GuiData.spriteBatch.Draw(logo, logoRect, Color.White * 0.25f); // Draw Logo
 

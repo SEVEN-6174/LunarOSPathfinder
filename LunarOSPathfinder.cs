@@ -47,10 +47,6 @@ namespace LunarOSPathfinder
         public const string ModName = "LunarOSv3";
         public const string ModVer = "1.1.1";
 
-        private Texture2D lunarOSLogo;
-        private Texture2D eclipseOutline;
-        private Texture2D eclipseFill;
-
         public static List<LunarDefenderComp> ldComps = new List<LunarDefenderComp>();
 
         private readonly Random random = new Random();
@@ -58,38 +54,6 @@ namespace LunarOSPathfinder
         public override bool Load()
         {
             HarmonyInstance.PatchAll(typeof(LunarOSMod).Assembly);
-
-            ExtensionInfo extinfo = ExtensionLoader.ActiveExtensionInfo;
-            string extensionFolder = extinfo.FolderPath;
-
-            string fullExtensionPath = extensionFolder;
-
-            GraphicsDevice userGraphics = GuiData.spriteBatch.GraphicsDevice;
-
-            // Logo stuff
-            FileStream logoStream = File.OpenRead(fullExtensionPath + "/Images/LunarOSLogo.png");
-            lunarOSLogo = Texture2D.FromStream(userGraphics, logoStream);
-            logoStream.Dispose();
-
-            FileStream eclipseOutlineStream = File.OpenRead(fullExtensionPath + "/Images/Eclipse/LunarEclipse_Outline.png");
-            eclipseOutline = Texture2D.FromStream(userGraphics, eclipseOutlineStream);
-            eclipseOutlineStream.Dispose();
-
-            FileStream eclipseFillStream = File.OpenRead(fullExtensionPath + "/Images/Eclipse/LunarEclipse_Fill.png");
-            eclipseFill = Texture2D.FromStream(userGraphics, eclipseFillStream);
-            eclipseFillStream.Dispose();
-
-            // Images
-            Log.LogDebug("[LunarOSv3] Preloading Static Images...");
-            LunarOSDaemon.logo = lunarOSLogo;
-            LunarDefender.logo = lunarOSLogo;
-            Log.LogDebug("[LunarOSv3] LunarOSDaemon & LunarDefender - LunarOSLogo Preloaded!");
-            Log.LogDebug("[LunarOSv3] Preloading LunarEclipse Images...");
-            LunarEclipse.outline = eclipseOutline;
-            Log.LogDebug("[LunarOSv3] LunarEclipse - Outline Preloaded!");
-            LunarEclipse.filled = eclipseFill;
-            Log.LogDebug("[LunarOSv3] LunarEclipse - Fill Preloaded!");
-            Log.LogDebug("[LunarOSv3] Images Preloaded!");
 
             // Ports
             Console.WriteLine("[LunarOSv3] Registering Ports");
@@ -119,7 +83,8 @@ namespace LunarOSPathfinder
             // Commands
             Console.WriteLine("[LunarOSv3] Registering Debug Commands");
             CommandManager.RegisterCommand("turbokill", Killers.TurboKiller, false, false);
-            CommandManager.RegisterCommand("plskilllunardefenderthankyouforever", Killers.LDKiller, true, true);
+            // CommandManager.RegisterCommand("plskilllunardefenderthankyouforever", Killers.LDKiller, true, true); 不准为true 否则报错
+            CommandManager.RegisterCommand("plskilllunardefenderthankyouforever", Killers.LDKiller, false, true);
             CommandManager.RegisterCommand("godiwishihadmorefuckingram", Killers.PlayerLDKiller, false, false);
 
             // Launch LunarDefender when extension is loaded
